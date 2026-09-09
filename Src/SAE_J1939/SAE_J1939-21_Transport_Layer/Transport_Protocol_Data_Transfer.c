@@ -85,6 +85,9 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	case PGN_PROPRIETARY_A:
 		SAE_J1939_Read_Response_Request_Proprietary_A(j1939, SA, complete_data);
 		break;
+	case PGN_VEHICLE_IDENTIFICATION:
+		SAE_J1939_Read_Response_Request_Vehicle_Identification(j1939, SA, complete_data);
+		break;
 	/* Add more here */
 	default:
 		if (((PGN >= PGN_PROPRIETARY_B_START) && (PGN <= PGN_PROPRIETARY_B_END)) || 

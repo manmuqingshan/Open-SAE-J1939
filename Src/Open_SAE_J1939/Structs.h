@@ -23,6 +23,7 @@
 #define MAX_TP_DT 1785U
 #define MAX_IDENTIFICATION 30U
 #define MAX_DM_FIELD 10U
+#define MAX_VEHICLE_IDENTIFICATION 17U
 #ifndef MAX_PROPRIETARY_A
 #define MAX_PROPRIETARY_A 15U
 #endif
@@ -185,11 +186,18 @@ typedef struct Component_identification {
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 } Component_identification;
 
+/* This struct is used to contain the vehicle's own information */
+typedef struct Vehicle_Identification {
+	uint8_t length_of_vin;
+	uint8_t vin[MAX_VEHICLE_IDENTIFICATION];			/* ASCII field */
+} Vehicle_identification;
+
 /* Storing the identifications from the reading process */
 struct Identifications {
 	struct Software_identification software_identification;
 	struct ECU_identification ecu_identification;
 	struct Component_identification component_identification;
+	struct Vehicle_Identification vehicle_identification;
 };
 
 /* PGN: 0x00FE30 (65072) to 0x00FE3F (65087) */
@@ -244,6 +252,7 @@ typedef struct {
 	struct Name this_name;
 	uint8_t this_ECU_address;
 	struct Identifications this_identifications;
+	struct Vehicle_Identification this_vehicle_identification;
 } Information_this_ECU;
 
 /* This struct is used for handling J1939 information */

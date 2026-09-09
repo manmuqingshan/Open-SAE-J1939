@@ -113,10 +113,11 @@ ENUM_J1939_RX_MSG Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 		}else if (id0 == 0x0C && id1 == 0xC4 && DA == j1939->information_this_ECU.this_ECU_address){
 			ISO_11783_Read_General_Purpose_Valve_Command(j1939, SA, data);										/* General Purpose Valve Command have only one valve */
 			rx_msg = RX_MSG_GP_VALVE_CMD;
-		}else if (id0 == 0x0 && id1 == 0x2 && (DA == j1939->information_this_ECU.this_ECU_address || DA == 0xFF)){
+		}else if (id0 == 0x0 && id1 == 0x2 && (DA == j1939->information_this_ECU.this_ECU_address || DA == 0xFF)) {
 			SAE_J1939_Read_Address_Delete(j1939, data);															/* Not a SAE J1939 standard */
 			rx_msg = RX_MSG_NOT_SAE_J1939;
-		}else{
+
+		} else {
 			rx_msg = RX_MSG_UNKNOWN;																			/* The message was not meant for this ECU */
 		}
 		/* Add more else if statement here */
