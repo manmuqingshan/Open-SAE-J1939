@@ -273,6 +273,7 @@ This flow chart in code how Open SAE J1939 library is working. This example demo
  	- Request Component Identification
  	- Request ECU Identification
  	- Request Software Identification
+	- Request Vehicle Identification Number (VIN);
 	- Request Proprietary A
 	- Request Proprietary B
  - SAE J1939:73 Diagnostics Layer

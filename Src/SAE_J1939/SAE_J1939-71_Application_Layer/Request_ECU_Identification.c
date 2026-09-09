@@ -70,6 +70,34 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_ECU_Identification(J1939* j19
 }
 
 /*
+ * Respond to a VIN request. (Server -> client)
+ */
+ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Vehicle_Identification(J1939* j1939, uint8_t DA) {
+
+	/* Multiple messages - Load data */
+	j1939->this_ecu_tp_cm.total_message_size_being_transmitted = 0;
+	uint8_t i;
+	for(i = 0; i < j1939->information_this_ECU.this_vehicle_identification.length_of_vin; i++) {
+		j1939->this_ecu_tp_dt.data[i] = j1939->information_this_ECU.this_vehicle_identification.vin[i];
+		j1939->this_ecu_tp_cm.total_message_size_being_transmitted += 1;
+	}
+	/* Send TP CM */
+	j1939->this_ecu_tp_cm.number_of_packages_being_transmitted = SAE_J1939_Transport_Protocol_GetNumberOfPackages(j1939->this_ecu_tp_cm.total_message_size_being_transmitted);
+	j1939->this_ecu_tp_cm.PGN_of_the_packeted_message = PGN_VEHICLE_IDENTIFICATION;
+	j1939->this_ecu_tp_cm.control_byte = DA == 0xFF ? CONTROL_BYTE_TP_CM_BAM : CONTROL_BYTE_TP_CM_RTS; /* If broadcast, then use BAM control byte */
+	ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA);
+	if(status != STATUS_SEND_OK){
+		return status;
+	}
+	/* Check if we are going to send it directly (BAM) */
+	if(j1939->this_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_BAM){
+		j1939->from_other_ecu_tp_cm.control_byte = j1939->this_ecu_tp_cm.control_byte;
+		return SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA);
+	}
+	return status;
+}
+
+/*
  * Store the ECU identification about other ECU
  * PGN: 0x00FDC5 (64965)
  */
@@ -89,4 +117,15 @@ void SAE_J1939_Read_Response_Request_ECU_Identification(J1939 *j1939, uint8_t SA
     info.ecu_identification = &j1939->from_other_ecu_identifications.ecu_identification;
     Callback_Function_Application(info);
   }
+}
+
+/*
+ * Handle the response of a VIN request coming from a server.
+ */
+void SAE_J1939_Read_Response_Request_Vehicle_Identification(J1939 *j1939, uint8_t SA, uint8_t data[]) {
+	uint8_t i;
+	for (i = 0; i < j1939->information_this_ECU.this_vehicle_identification.length_of_vin; i++) {
+		j1939->from_other_ecu_identifications.vehicle_identification.vin[i] = data[i];
+	}
+	j1939->from_other_ecu_identifications.ecu_identification.from_ecu_address = SA;
 }

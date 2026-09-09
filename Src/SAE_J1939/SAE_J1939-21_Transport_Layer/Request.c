@@ -102,6 +102,9 @@ void SAE_J1939_Read_Request(J1939* j1939, uint8_t SA, uint8_t data[])
         case PGN_COMPONENT_IDENTIFICATION:
             SAE_J1939_Response_Request_Component_Identification(j1939, SA);
             break;
+        case PGN_VEHICLE_IDENTIFICATION:
+            SAE_J1939_Response_Request_Vehicle_Identification(j1939, dm_response_da);
+            break;
         case PGN_PROPRIETARY_A: SAE_J1939_Response_Request_Proprietary_A(j1939, SA); break;
         default:
             if (((PGN >= PGN_PROPRIETARY_B_START) && (PGN <= PGN_PROPRIETARY_B_END))

@@ -21,6 +21,7 @@ bool Open_SAE_J1939_Startup_ECU(J1939* j1939) {
 	memcpy(&j1939->information_this_ECU, (Information_this_ECU*)ECU_information_data, ECU_information_length);
 
 	/* If we are going to send and receive the ECU identification and component identification, we need to specify the size of them */
+	j1939->information_this_ECU.this_vehicle_identification.length_of_vin = MAX_VEHICLE_IDENTIFICATION;
 	j1939->information_this_ECU.this_identifications.ecu_identification.length_of_each_field = MAX_IDENTIFICATION;
 	j1939->information_this_ECU.this_identifications.component_identification.length_of_each_field = MAX_IDENTIFICATION;
 	j1939->from_other_ecu_identifications.ecu_identification.length_of_each_field = MAX_IDENTIFICATION;
