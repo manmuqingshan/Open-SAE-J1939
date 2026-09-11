@@ -71,6 +71,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_ECU_Identification(J1939* j19
 
 /*
  * Respond to a VIN request. (Server -> client)
+ * PGN: 0x00FEEC (65260)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Vehicle_Identification(J1939* j1939, uint8_t DA) {
 
@@ -120,7 +121,8 @@ void SAE_J1939_Read_Response_Request_ECU_Identification(J1939 *j1939, uint8_t SA
 }
 
 /*
- * Handle the response of a VIN request coming from a server.
+ * Handle the response of a VIN request coming from a server
+ * PGN: 0x00FEEC (65260)
  */
 void SAE_J1939_Read_Response_Request_Vehicle_Identification(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	uint8_t i;
