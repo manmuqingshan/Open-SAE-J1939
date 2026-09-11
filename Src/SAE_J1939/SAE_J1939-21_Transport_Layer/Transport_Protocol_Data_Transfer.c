@@ -124,9 +124,9 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j
 				}
 			}
 
-			/* Transmitt message */
-			status = CAN_Send_Message(ID, package);
+			/* Transmit message */
 			CAN_Delay(100);																		/* Important CAN delay according to standard */
+			status = CAN_Send_Message(ID, package);
 			if (status != STATUS_SEND_OK) {
 				break;
 			}
